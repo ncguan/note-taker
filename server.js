@@ -69,7 +69,7 @@ app.delete('/api/notes/:id', (req, res) => {
       console.error(err);
     } else {
       const parsedNotes = JSON.parse(data);
-      const index = parsedNotes.findIndex((element) => element == req.params.id);
+      const index = parsedNotes.findIndex((element) => element.id == req.params.id);
 
       parsedNotes.splice(index, 1);
       notes = parsedNotes;
