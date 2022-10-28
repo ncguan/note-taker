@@ -22,12 +22,9 @@ app.get('/api/notes', (req, res) => {
       res.json(JSON.parse(data));
     }
   })
-  console.info(`${req.method} request received`);
 });
 
 app.post('/api/notes', (req, res) => {
-  console.info(`${req.method} request received to add a review`);
-
   const { title, text } = req.body;
 
   if (title && text) {
@@ -50,7 +47,7 @@ app.post('/api/notes', (req, res) => {
           './db/db.json',
           JSON.stringify(parsedNotes, null, 4),
           (writeErr) =>
-            writeErr ? console.error(writeErr) : console.info('Successfully saved notes!')
+            writeErr ? console.error(writeErr) : console.info('Successfully saved a note!')
         );
       }
     });
@@ -60,10 +57,38 @@ app.post('/api/notes', (req, res) => {
     };
 
     res.json(response);
-  } 
+  }
   else {
     res.json('Error in saving note');
   }
+});
+
+app.delete('/api/notes/:id', (req, res) => {
+  fs.readFile('./db/db.json', 'utf8', (err, data) => {
+    if (err) {
+      console.error(err);
+    } else {
+      const parsedNotes = JSON.parse(data);
+      const index = parsedNotes.findIndex((element) => element == req.params.id);
+
+      parsedNotes.splice(index, 1);
+      notes = parsedNotes;
+
+      fs.writeFile(
+        './db/db.json',
+        JSON.stringify(parsedNotes, null, 4),
+        (writeErr) =>
+          writeErr ? console.error(writeErr) : console.info('Successfully deleted a note!')
+      );
+    }
+  });
+
+  const response = {
+    body: "",
+  };
+
+  res.json(response);
+
 });
 
 app.get('/notes', (req, res) =>
