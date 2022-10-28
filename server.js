@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 let notes = require('./db/db.json');
+const uniqid = require('uniqid');
 
 const PORT = process.env.PORT || 3001;
 
@@ -31,6 +32,7 @@ app.post('/api/notes', (req, res) => {
 
   if (title && text) {
     const newNote = {
+      id: uniqid(),
       title,
       text,
     };
